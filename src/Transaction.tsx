@@ -61,36 +61,44 @@ function Transaction() {
 
         if (!kernelClient) return;
 
-/*
-
-        const hash = await kernelClient.sendUserOperation([
-          {
-            callData: await kernelClient.account.encodeCallData({
-              abi: contractAbi,
-              args: [address],
-              functionName: "mint",
-            }),
+          const userOp = {
             target: nftAddress as `0x${string}`,
-          },
-        ]);
-*/
+            data: encodeFunctionData({
+              abi: contractAbi,
+              functionName: "mint",
+              args: [address , BigInt(1)],
+            }) as `0x${string}`,
+          };
+          const hash = await kernelClient.sendUserOperation(userOp);
 
-        const userOpHash = await kernelClient.sendUserOperation({
-          userOperation: {
-            callData: await kernelClient.account!.encodeCallData({
-              to: nftAddress as `0x${string}`,
-              value: BigInt(0),
-              data: encodeFunctionData({
-                abi: contractAbi,
-                functionName: "mint",
-                args: [address, BigInt(1)],
-              }),
-            }),
-          },
-        })
+        //   const hash = await kernelClient.sendUserOperation([
+        //   {
+        //     callData: await kernelClient.account!.encodeCallData({
+        //       abi: contractAbi,
+        //       args: [address],
+        //       functionName: "mint",
+        //     }),
+        //     target: nftAddress as `0x${string}`,
+        //   },
+        // ]);
 
 
-        console.log(userOpHash);
+        // const userOpHash = await kernelClient.sendUserOperation({
+        //   userOperation: {
+        //     callData: await kernelClient.account!.encodeCallData({
+        //       to: nftAddress as `0x${string}`,
+        //       value: BigInt(0),
+        //       data: encodeFunctionData({
+        //         abi: contractAbi,
+        //         functionName: "mint",
+        //         args: [address, BigInt(1)],
+        //       }),
+        //     }),
+        //   },
+        // })
+
+
+        console.log(hash);
         setIsMinting(false);
         setHasMinted(true);
       } catch (e) {
